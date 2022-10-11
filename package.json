@@ -9,13 +9,13 @@
     "dev-theme": "pnpm --filter=theme-doc exec -- npm run dev",
     "dev-site": "pnpm --filter=doc-site exec -- npm run dev",
     "format": "prettier --write ./**/*.{js,ts,tsx}",
-    "ver": "pnpm recursive --filter create-vite-pages --filter vite-plugin-react-pages  --filter vite-pages-theme-doc exec -- npm version",
+    "ver": "pnpm recursive --filter create-vite-pages   --filter vite-pages-theme-doc exec -- npm version",
     "ver:p": "npm run ver -- patch",
     "ver:mi": "npm run ver -- minor",
     "ver:major": "npm run ver -- major",
-    "pub": "pnpm -r publish --filter create-vite-pages --filter vite-plugin-react-pages  --filter vite-pages-theme-doc",
+    "pub": "pnpm -r publish --filter create-vite-pages   --filter vite-pages-theme-doc",
     "update-deps": "pnpm -r update -i -L",
-    "update-local-deps": "pnpm update -r vite-plugin-react-pages vite-pages-theme-doc --workspace --filter \"!./packages/create-project/**\"",
+    "update-local-deps": "pnpm update -r  vite-pages-theme-doc --workspace --filter \"!./packages/create-project/**\"",
     "test": "playwright test -c ./test-setup",
     "test-serve": "cross-env VITE_PAGES_MODE=serve pnpm test",
     "test-build": "cross-env VITE_PAGES_MODE=build pnpm test",
@@ -46,7 +46,6 @@
     "overrides": {
       "react": "^17.0.1",
       "react-dom": "^17.0.1",
-      "vite-plugin-react-pages": "workspace:*",
       "vite-pages-theme-doc": "workspace:*"
     },
     "peerDependencyRules": {

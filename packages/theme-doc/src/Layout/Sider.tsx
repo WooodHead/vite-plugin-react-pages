@@ -26,7 +26,7 @@ const AppSider: React.FC<Props> = ({ sideNavsData }) => {
 
   return (
     <div className={s.sider}>
-      sdfsadf
+      222q222123123
       {sideNavsData && (
         <>
           <Menu
