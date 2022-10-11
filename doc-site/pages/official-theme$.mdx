@@ -1,0 +1,133 @@
+---
+order: 0.5
+---
+
+# Official Theme
+
+`vite-pages-theme-doc` is an official theme of vite-pages. It should satisfy most users' needs. This document site is powered by this theme.
+
+## How to use
+
+You should config the theme in `_theme.tsx`:
+
+```tsx
+// _theme.tsx
+import React from 'react'
+import { createTheme } from 'vite-pages-theme-doc'
+
+export default createTheme({
+  topNavs: [
+    { label: 'index', path: '/' },
+    { label: 'Vite', href: 'https://github.com/vitejs/vite' },
+  ],
+  logo: 'Vite Pages',
+  // Other configs...
+})
+```
+
+[Here is a complete example](https://github.com/vitejs/vite-plugin-react-pages/tree/main/packages/playground/use-theme-doc).
+
+## Auto side menu generation
+
+Doc theme can generation a side menu automatically, based on the pages information.
+
+You can control the title/sorting/grouping of the side menu, by notating these [page static data](/page-data#static-data):
+
+- title
+- order (default order is 1)
+- group (explain later)
+- subGroup (explain later)
+
+### How side menu generation works
+
+For example, if your site has these pages:
+
+```
+/
+/playground
+/components
+/components/button
+/components/card
+/references/glossary
+/references/apis/api1
+/references/apis/api2
+/references/error-codes/code1
+/references/error-codes/code2
+```
+
+Firstly, the theme will divide pages into `group`s based on the **first segment** of page path:
+
+```
+group /:
+  /
+  /playground
+
+group components:
+  /components
+  /components/button
+  /components/card
+
+group references:
+  /references/glossary
+  /references/apis/api1
+  /references/apis/api2
+  /references/error-codes/code1
+  /references/error-codes/code2
+```
+
+You can customize `group` in page static data. For example:
+
+```
+Put this at top of a markdown page:
+---
+group: references
+---
+Or put this at top of a tsx/jsx page:
+/**
+ * @group references
+ */
+```
+
+Then, the theme will divide pages into `subGroup`s based on the **second segment** of pages' path:
+
+```
+group /:
+  subGroup /:
+    /
+    /playground
+
+group components:
+  subGroup /:
+    /components
+    /components/button
+    /components/card
+
+group references:
+  subGroup /:
+    /references/glossary
+  subGroup apis:
+    /references/apis/api1
+    /references/apis/api2
+  subGroup error-codes:
+    /references/error-codes/code1
+    /references/error-codes/code2
+```
+
+`subGroup` can also be customized in page static data, just like `group` does.
+
+What is the meanings of `group` and `subGroup`?
+
+- `group` is a site isolation boundary: we only display **one** `group` at a time. If a user open a page in group `references`, he/she will **only see side menu items from that group**. He/She will not see menu items from `components` group.
+- `subGroup` decide how the theme sort side menu items. All side menu items with same `subGroup` will be rendered adjacently. This document site is an example.
+
+## Theme configs
+
+The `createTheme` exported by `vite-pages-theme-doc` accepts [these options](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/theme-doc/src/index.tsx):
+
+<FileText src="../../packages/theme-doc/src/ThemeConfig.doc.ts" syntax="ts" />
+
+## Fully theme customization
+
+If the basic theme doesn't satisfy your need, you can [create your own theme](/theme-customization).
+
+> Contributions to [the theme](https://github.com/vitejs/vite-plugin-react-pages/tree/main/packages/theme-doc) are always welcomed.

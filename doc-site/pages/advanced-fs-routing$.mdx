@@ -1,0 +1,163 @@
+---
+title: Advanced FS Routing
+order: 0
+subGroup: advanced
+---
+
+## Advanced Filesystem Routing: pageStrategy API
+
+> The "Basic Filesystem Routing Convention" should satisfy most users' needs. **You probably don't need to read this advanced guide**.
+
+For advanced users, vite-pages let you implement your own filesystem routing convention: you can **teach vite-pages how to collect page data from your project**.
+
+When [configuring vite-plugin-react-pages](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/create-project/template-lib/docs/vite.config.ts), you can pass the `pageStrategy` option. It should be an instance of `PageStrategy` class. Here is an example of customizing pageStrategy:
+
+vite.config.ts:
+
+<FileText
+  src="../../packages/playground/custom-find-pages2/pages/vite.config.ts"
+  syntax="ts"
+/>
+
+With this custom pageStrategy, page files don't need to ends with `$`. Instead, they need to match the pattern `**/index.{md,mdx,js,jsx,ts,tsx}`.
+
+> Checkout complete examples in [the custom-find-pages2 fixture](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/playground/custom-find-pages2/vite.config.ts) or [the project scaffold](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/create-project/template-lib/docs/vite.config.ts).
+
+### Steps of customizing pageStrategy
+
+As shown by the above example, here is the usual steps to customize pageStrategy:
+
+1. Define a `findPages` function and pass it to `PageStrategy` constructor.
+2. Inside the `findPages`, use `helpers.watchFiles(baseDir, glob, fileHandler)` to find the files that you need.
+   - vite-pages will pass the glob(or glob array) to [chokidar](https://github.com/paulmillr/chokidar). vite-pages use chokidar to scan the fileSystem and watch for files.
+   - Whenever a file is scaned, added or updated, vite-pages will call the fileHandler with that file. When the file is unlinked, vite-pages will automatically delete the related page data.
+3. Inside the `fileHandler`, read the infomation from `file` and register page data by calling `fileHandlerAPI.addPageData`.
+   - There are two more helpers inside `fileHandlerAPI` that help you to update page data. We will introduce them in the following section.
+
+### Handle file change and update page data
+
+The `fileHandler` should conform to this interface:
+
+```ts
+type FileHandler = (
+  file: File,
+  api: PageAPIs
+) => void | Promise<void> | DataPiece | Promise<DataPiece>
+```
+
+The `HandlerAPI` contains a set of helpers that help you to update page data.
+
+#### fileHandlerAPI.addPageData(dataPiece)
+
+The dataPiece should conform to this interface:
+
+```ts
+interface DataPiece {
+  /**
+   * The page route path.
+   * User can register multiple page data with same pageId,
+   * as long as they have different keys.
+   * Page data with same pageId will be merged.
+   *
+   * @example '/posts/hello-world'
+   */
+  readonly pageId: string
+  /**
+   * The data key.
+   * For a same page, users can register multiple data pieces,
+   * each with its own key. (Composed Page Data)
+   *
+   * @default 'main'
+   */
+  readonly key?: string
+  /**
+   * The path to the runtime data module.
+   * It will be registered with the `key`.
+   */
+  readonly dataPath?: string
+  /**
+   * The value of static data.
+   * It will be registered with the `key`.
+   */
+  readonly staticData?: any
+  /**
+   * when multiple data pieces have same key (conflict),
+   * the data piece with highest priority will win
+   * @default 1
+   */
+  readonly priority?: number
+}
+```
+
+In most cases, `dataPath` is the path of the currently handled file. And `staticData` is statically extracted from the file content (js docblock or markdown frontmatter). Vite-pages has exported a helper `extractStaticData` to do that.
+
+Checkout [the custom-find-pages2 fixture](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/playground/custom-find-pages2/vite.config.ts) for an example.
+
+> Checkout [the page data doc](/page-data) for more explanation of `key`.
+
+#### fileHandlerAPI.getRuntimeData(pageId)
+
+Inside the fileHandler, you can use it to get the runtimeData of a certain page. You can read or mutate the properties of it:
+
+```ts
+const runtimeDataPaths = fileHandlerAPI.getRuntimeData(pageId)
+if (!runtimeDataPaths[key]) runtimeDataPaths[key] = pathToRuntimeModule
+```
+
+Checkout [the custom-find-pages fixture](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/playground/custom-find-pages/vite.config.ts) for an example.
+
+#### fileHandlerAPI.getStaticData(pageId)
+
+Similar to the `fileHandlerAPI.getRuntimeData` API, you can use `fileHandlerAPI.getStaticData` to get the staticData of a certain page. And tou can read or mutate the properties of it:
+
+```ts
+const staticData = fileHandlerAPI.getStaticData(pageId)
+if (!staticData[key]) staticData[key] = await extractStaticData(file)
+```
+
+Checkout [the custom-find-pages fixture](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/playground/custom-find-pages/vite.config.ts) for an example.
+
+### Sharable pageStrategy
+
+You can also define your strategy as a subclass of `PageStrategy`. It is more sharable than the previous way.
+
+For example, this is how vite-pages defines the default page strategy:
+
+```ts
+export class DefaultPageStrategy extends PageStrategy {
+  constructor(
+    opts: { extraFindPages?: FindPages; fileHandler?: FileHandler } = {}
+  ) {
+    const { extraFindPages, fileHandler = defaultFileHandler } = opts
+    // pass a wrapped findPages function to super class
+    super((pagesDir, helpersFromParent) => {
+      // we can create our own helpers, providing a default fileHandler
+      // and not using helpersFromParent
+      const helpers = this.createHelpers(fileHandler)
+      helpers.watchFiles(pagesDir, '**/*$.{md,mdx,js,jsx,ts,tsx}')
+      if (typeof extraFindPages === 'function') {
+        extraFindPages(pagesDir, helpers)
+      }
+    })
+  }
+}
+```
+
+> [Source code of DefaultPageStrategy](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/react-pages/src/node/page-strategy/DefaultPageStrategy/index.ts).
+
+[here is an example of using it](/examples/component-library).
+
+#### Examples
+
+For real-life examples of customizing pageStrategy, checkout ["Example: develop a component library"](/examples/component-library).
+
+#### Types
+
+Here is the relavent types:
+
+<FileText
+  src="../../packages/react-pages/src/node/page-strategy/types.doc.ts"
+  syntax="ts"
+/>
+
+> [Source code](https://github.com/vitejs/vite-plugin-react-pages/blob/main/packages/react-pages/src/node/page-strategy/types.document.d.ts).

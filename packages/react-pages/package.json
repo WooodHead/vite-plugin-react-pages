@@ -1,0 +1,87 @@
+{
+  "name": "vite-plugin-react-pages",
+  "version": "3.3.1",
+  "main": "dist/node/index.js",
+  "module": "dist/node-esm/index.mjs",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "import": "./dist/node-esm/index.mjs",
+      "require": "./dist/node/index.js"
+    },
+    "./*": "./*",
+    "./client": "./client.ts",
+    "./clientTypes": "./clientTypes.d.ts"
+  },
+  "bin": {
+    "vite-pages": "bin/vite-pages.js"
+  },
+  "keywords": [
+    "vite",
+    "react",
+    "vite-pages",
+    "react-pages",
+    "vite-plugin-react-pages"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitejs/vite-plugin-react-pages.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vitejs/vite-plugin-react-pages/issues"
+  },
+  "homepage": "https://github.com/vitejs/vite-plugin-react-pages",
+  "scripts": {
+    "build": "rimraf ./dist && concurrently \"npm:build-*\"",
+    "build-node": "tsc -p src/node",
+    "build-node-esm": "rollup -c",
+    "build-client": "tsc -p src/client",
+    "dev": "rimraf ./dist && concurrently \"npm:dev-*\"",
+    "dev-node": "tsc -w -p src/node",
+    "dev-node-esm": "rollup -c -w",
+    "dev-client": "tsc -w -p src/client",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "vite": "^2.5.6 || ^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.18.10",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^14.0.1",
+    "@rollup/plugin-typescript": "^8.5.0",
+    "@types/enhanced-resolve": "^3.0.6",
+    "@types/fs-extra": "^9.0.8",
+    "@types/minimist": "^1.2.0",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.2",
+    "@types/react-router-dom": "^5.1.7",
+    "concurrently": "^7.3.0",
+    "react": "^17.0.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.79.0",
+    "typescript": "^4.3.2",
+    "vite": "^3.1.0",
+    "vite-plugin-mdx": "^3.5.11"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "chokidar": "^3.5.1",
+    "dequal": "^2.0.3",
+    "enhanced-resolve": "^5.10.0",
+    "fs-extra": "^10.1.0",
+    "gray-matter": "^4.0.2",
+    "jest-docblock": "^28.1.1",
+    "jotai": "^0.15.3",
+    "mini-debounce": "^1.0.8",
+    "minimist": "^1.2.5",
+    "pkg-up": "^3.1.0",
+    "remark-frontmatter": "^2.0.0",
+    "slash": "^3.0.0",
+    "tiny-invariant": "^1.1.0",
+    "typescript": "^4.8.3",
+    "unist-util-visit": "^2.0.3"
+  }
+}
