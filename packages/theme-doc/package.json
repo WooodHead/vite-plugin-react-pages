@@ -22,15 +22,21 @@
   },
   "homepage": "https://github.com/vitejs/vite-plugin-react-pages",
   "scripts": {
+    "dev": "vite serve",
+    "debug": "node --inspect ./node_modules/vite/bin/vite serve",
+    "build": "rimraf dist && vite build --outDir dist && serve -s dist",
+    "ssr": "rimraf dist && vite-pages ssr && serve dist",
+    "ssr-for-deploy": "rimraf dist && GITHUB_PAGES_DEPLOY=true vite-pages ssr",
+    "deploy": "npm run ssr-for-deploy && touch ./dist/.nojekyll && gh-pages -d dist -t",
+    "start": "vite serve",
     "clean": "rimraf ./dist ./lib ./dist-cjs",
-    "build": "npm run clean && concurrently \"npm:build-*\"",
+    "build0": "npm run clean && concurrently \"npm:build-*\"",
     "build-dts": "tsc",
     "build-copy-files": "node ./scripts/copy.js",
     "build-rollup": "rollup -c && node scripts/add-css-import.js",
-    "dev": "npm run clean && concurrently \"npm:dev-*\"",
+    "dev0": "npm run clean && concurrently \"npm:dev-*\"",
     "dev-dts": "tsc --watch",
-    "dev-rollup": "rollup -wc",
-    "prepare": "npm run build"
+    "dev-rollup": "rollup -wc"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
@@ -42,12 +48,16 @@
     "@rollup/plugin-node-resolve": "^14.0.1",
     "@rollup/plugin-typescript": "^8.5.0",
     "@types/github-slugger": "^1.3.0",
+    "@types/react": "^17.0.3",
+    "@types/react-router-dom": "^5.1.7",
+    "@vitejs/plugin-react": "^2.1.0",
     "antd": "^4.23.1",
     "babel-plugin-import": "^1.13.3",
     "chokidar": "^3.5.1",
     "concurrently": "^7.3.0",
     "copy-to-clipboard": "^3.3.2",
     "fs-extra": "^10.1.0",
+    "gh-pages": "^4.0.0",
     "github-markdown-css": "^4.0.0",
     "github-slugger": "^1.3.0",
     "globby": "^11.0.2",
@@ -58,11 +68,19 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.79.0",
     "rollup-plugin-postcss": "^4.0.0",
+    "serve": "^14.0.1",
     "tslib": "^2.4.0",
     "typescript": "^4.8.3",
+    "vite": "^3.1.0",
+    "vite-pages-theme-doc2": "workspace:*",
+    "vite-plugin-mdx": "^3.5.11",
     "vite-plugin-react-pages": "3.3.1"
   },
   "dependencies": {
-    "@mdx-js/react": "^1.6.22"
+    "@mdx-js/mdx": "^1.6.22",
+    "@mdx-js/react": "^2.1.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0"
   }
 }

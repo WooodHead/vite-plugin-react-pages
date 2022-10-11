@@ -1,0 +1,16 @@
+---
+title: Filesystem Routing
+order: 1
+---
+
+# Filesystem Routing
+
+Vite-pages generates page routes based on your project file structure (filesystem routing).
+
+## Basic Filesystem Routing Convention
+
+The basic filesystem routing convention is very intuitive. It works out of the box and doesn't need any config. It should satisfy most users' needs.
+
+**You can create a page by simply creating a file**: `page-name$.tsx`. Notice the `$` **at the end of the filename**. Vite-pages recognizes it and know it is a page entry.
+
+If the filename is `index$.tsx`, the page route path will be the path of the directory. See examples below.
