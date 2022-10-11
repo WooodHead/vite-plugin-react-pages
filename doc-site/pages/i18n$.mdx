@@ -6,14 +6,14 @@ subGroup: advanced
 
 # Internationalization
 
-i18n support can be provided by theme. For example, [the official theme(vite-pages-theme-doc)](/official-theme) support i18n. This document shows how to create a multi-lingual site with it.
+i18n support can be provided by theme. For example, [the official theme(vite-pages-theme-doc2)](/official-theme) support i18n. This document shows how to create a multi-lingual site with it.
 
 ## Define i18n metadata in the theme config
 
-The [the official theme(vite-pages-theme-doc)](/official-theme) accepts 1i8n config like this:
+The [the official theme(vite-pages-theme-doc2)](/official-theme) accepts 1i8n config like this:
 
 ```tsx
-import { createTheme } from 'vite-pages-theme-doc'
+import { createTheme } from 'vite-pages-theme-doc2'
 
 export default createTheme({
   i18n: {
@@ -117,8 +117,8 @@ type ThemeContextValue = {
 To make topNavs support multiple languages, you can define `topNavs` like this:
 
 ```ts
-import { createTheme } from 'vite-pages-theme-doc'
-import type { MenuConfig } from 'vite-pages-theme-doc'
+import { createTheme } from 'vite-pages-theme-doc2'
+import type { MenuConfig } from 'vite-pages-theme-doc2'
 
 const topNavsConfig: { [locale: string]: MenuConfig[] } = {
   en: [
@@ -227,7 +227,7 @@ For example, here is a React Component page for default locale (`/bar$.tsx`):
  */
 
 import React from 'react'
-import { useThemeCtx } from 'vite-pages-theme-doc'
+import { useThemeCtx } from 'vite-pages-theme-doc2'
 
 const Page = () => {
   const intl = useIntl()
@@ -275,7 +275,7 @@ Notice that we reuse the same React Component for multiple locales. And we defin
 ### Get current locale in React Components or Hooks
 
 ```tsx
-import { useThemeCtx } from 'vite-pages-theme-doc'
+import { useThemeCtx } from 'vite-pages-theme-doc2'
 
 function useI18nMeta() {
   const {

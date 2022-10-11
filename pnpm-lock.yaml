@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 overrides:
   react: ^17.0.1
   react-dom: ^17.0.1
-  vite-pages-theme-doc: workspace:*
+  vite-pages-theme-doc2: workspace:*
 
 importers:
 
@@ -52,7 +52,7 @@ importers:
       rimraf: ^3.0.2
       serve: ^14.0.1
       vite: ^3.1.0
-      vite-pages-theme-doc: workspace:*
+      vite-pages-theme-doc2: workspace:*
       vite-plugin-mdx: ^3.5.11
       vite-plugin-react-pages: 3.3.1
     dependencies:
@@ -68,7 +68,7 @@ importers:
       rimraf: 3.0.2
       serve: 14.0.1
       vite: 3.1.0
-      vite-pages-theme-doc: link:../packages/theme-doc
+      vite-pages-theme-doc2: link:../packages/theme-doc
       vite-plugin-mdx: 3.5.11_6ecyvma43yq3nms7n2dvcf5pte
       vite-plugin-react-pages: 3.3.1_react@17.0.2+vite@3.1.0
 
