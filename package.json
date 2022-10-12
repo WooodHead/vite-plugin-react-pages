@@ -5,8 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"npm:dev-*\"",
-    "dev-theme": "pnpm --filter=theme-doc exec -- npm run dev",
+    "dev": "pnpm --filter=theme-doc exec -- npm run dev",
     "dev-site": "pnpm --filter=doc-site exec -- npm run dev",
     "format": "prettier --write ./**/*.{js,ts,tsx}",
     "ver": "pnpm recursive  --filter vite-pages-theme-doc2 exec -- npm version",
@@ -23,8 +22,7 @@
     "test-debug": "pnpm test -- --debug",
     "build:docs": "pnpm --filter doc-site run ssr-for-deploy",
     "postinstall": "node ./scripts/linkBins.js",
-    "install-test-deps": "playwright install --with-deps chromium",
-    "prepare": "husky install"
+    "install-test-deps": "playwright install --with-deps chromium"
   },
   "devDependencies": {
     "@playwright/test": "~1.23.4",
