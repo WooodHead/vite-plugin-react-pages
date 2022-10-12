@@ -1,0 +1,7 @@
+/** 
+ * @tailwind base;
+ * 使用自定义 preflisht.css 替代
+ */
+ @tailwind components;
+ @tailwind utilities;
+ 
