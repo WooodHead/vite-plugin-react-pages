@@ -7,6 +7,8 @@ import AppLayout, { MDX } from './Layout'
 import { themeConfigCtx, themePropsCtx, themeCtx } from './ctx'
 
 import './style.less'
+// import '../styles/preflight.css'
+// import '../styles/tailwind.css'
 import { Demo } from './Layout/Demo'
 import AnchorLink from './components/AnchorLink'
 import type { ThemeConfig, ThemeContextValue } from './ThemeConfig.doc'
